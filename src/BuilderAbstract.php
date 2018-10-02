@@ -231,8 +231,15 @@ abstract class BuilderAbstract
         }
         if ( ! $amended) {
             unset($item);
-            if($diff_with_tax<0){
-                $item['type']              = 'discount';
+            // Discount only can contain negative values.
+            if($diff_with_tax < 0) {
+              $item['type'] = 'discount';
+            }
+            // If the item is not discount, some extra params have to be set.
+            else {
+              $item['price_with_tax'] = $diff_with_tax;
+              $item['quantity'] = 1;
+              $item['downloadable'] = TRUE;
             }
             $item['reference']         = '';
             $item['name']              = 'ajuste por redondeos';
